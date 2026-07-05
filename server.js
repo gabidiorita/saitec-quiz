@@ -8,7 +8,7 @@ const io = new Server(server);
 const games = new Map();
 
 app.use(express.static('public'));
-
+app.use(express.static('.', { index: 'index.html' }));
 function code() {
   let value;
   do value = String(Math.floor(100000 + Math.random() * 900000));
