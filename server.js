@@ -7,8 +7,10 @@ const server = http.createServer(app);
 const io = new Server(server);
 const games = new Map();
 
+// Admite tanto la carpeta `public` como archivos subidos directamente a GitHub.
 app.use(express.static('public'));
 app.use(express.static('.', { index: 'index.html' }));
+
 function code() {
   let value;
   do value = String(Math.floor(100000 + Math.random() * 900000));
@@ -78,7 +80,7 @@ function nextQuestion(pin, socket) {
   game.state = 'question';
   for (const p of game.players.values()) p.answered = false;
   const q = game.questions[game.index];
-  io.to(pin).emit('game:question', { number: game.index + 1, total: game.questions.length, text: q.text, options: q.options });
+  io.to(pin).emit('game:question', { number: game.index + 1, total: game.questions.length, text: q.text, image: q.image || '', options: q.options });
   io.to(game.host).emit('host:players', publicPlayers(game));
 }
 
