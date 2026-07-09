@@ -4,7 +4,8 @@ const { Server } = require('socket.io');
 
 const app = express();
 const server = http.createServer(app);
-const io = new Server(server);
+// Permitimos quizzes con imágenes guardadas. Socket.IO por defecto corta mensajes grandes.
+const io = new Server(server, { maxHttpBufferSize: 25 * 1024 * 1024 });
 const games = new Map();
 
 // Admite tanto la carpeta `public` como archivos subidos directamente a GitHub.

@@ -107,11 +107,17 @@ function createGame(title, questions) {
   questions = normalizeQuestions(questions);
   if (!validQuestions(questions)) return;
 
-  socket.emit('host:create', { title, questions }, res => {
+  $('error').textContent = 'Creando partida...';
+  socket.timeout(20000).emit('host:create', { title, questions }, (err, res) => {
+    if (err) {
+      $('error').textContent = 'No se ha podido crear la partida. Si tiene imágenes, quizá pesaba demasiado o falta actualizar Render.';
+      return;
+    }
     if (res.error) {
       $('error').textContent = res.error;
       return;
     }
+    $('error').textContent = '';
     pin = res.pin;
     $('pin').textContent = pin;
     show('lobby');
